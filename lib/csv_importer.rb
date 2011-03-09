@@ -12,8 +12,9 @@ module CSVImporter
     errors = []
     options.each do |model, file|
       model = model.capitalize
-      eval("errors << #{model}.import(#{model}, #{file})")
+      eval("errors << #{model}.import(#{model}, #{file.to_s})")
     end
+
     errors.flatten
   end
   module_function :import
@@ -23,4 +24,5 @@ module CSVImporter
     files = Dir[Rails.root.join('app/models/csv_importer/*.rb')]
     files.each{ |f| require f } unless files.empty?
   end
+  module_function :require_files
 end

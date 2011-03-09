@@ -4,8 +4,8 @@ module CSVImporter
     
     include Columns
 
-    def self.import(model_name, file_path)
-      model_name = model_name.capitalize
+    def self.import(model, file_path)
+      model = model.capitalize
       table = Table.new(file_path)
       errors = []
       table.rows.each do |rownum, row|
@@ -14,11 +14,11 @@ module CSVImporter
           
           row.to_hash.each do |idx, col_val|
             # col_val = col_val.to_i if col_val.is_a? Numeric
-            if key = get_key(model_name, idx)
+            if key = get_key(idx)
               base[key] = col_val
             end
           end
-          base.save_to_database(account)
+          base.save_to_database(model)
         rescue ActiveRecord::RecordInvalid => invalid
           errors << "File #{name.demodulize} - Row #{rownum} fails: #{invalid.record.errors.full_messages.join(", ")}"
         rescue Exception => e
@@ -30,14 +30,14 @@ module CSVImporter
       errors
     end
 
-    def save_to_database(model_name)
-      model = eval("ActiveRecord::Base::#{model_name}")
+    def save_to_database(model)
+      model = eval("ActiveRecord::Base::#{model}")
       if self.valid?
-        model.new
-        self.attributes.each do |key, value|
-          model.send("#{key}=".to_sym, value)
-      end
-        
+         model_instance = model.new
+         self.attributes.each do |key, value|
+           model_instance.send("#{key}=".to_sym, value)
+       end
+         model_instance.save
       end
     end
   end 

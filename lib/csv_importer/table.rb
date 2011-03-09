@@ -1,5 +1,6 @@
 module CSVImporter
   class Table
+    require 'fastercsv'
     attr_accessor :heards, :rows
 
     def initialize(file_path)

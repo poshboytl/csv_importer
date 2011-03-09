@@ -16,16 +16,16 @@ module CSVImporter
         @keys ||= []
       end
       
-      def column(db_name, sheet_name, type, options = { })
-        column = Column.new(db_name, sheet_name, type, options)
+      def column(db_name, title_name, type, options = { })
+        column = Column.new(db_name, title_name, type, options)
         columns[db_name] = column
         keys << db_name
         create_accessors_for(column)
       end
       
-      def get_key(model_name, idx)
+      def get_key(title_name)
         keys.each do |key|
-          return key if idx == key and @columns[idx].model_name.downcase == model_name.downcase.strip
+          return key if @columns[key].title_name.downcase == title_name.downcase.strip
         end
         return nil
       end
