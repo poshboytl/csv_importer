@@ -12,7 +12,9 @@ module CSVImporter
     errors = []
     options.each do |model, file|
       model = model.capitalize
-      eval("errors << #{model}.import(#{model}, #{file.to_s})")
+      eval <<-end_eval
+        errors << CSVImporter::#{model.to_s}.import('#{model}', '#{file}')
+      end_eval
     end
 
     errors.flatten

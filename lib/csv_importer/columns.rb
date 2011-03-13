@@ -97,6 +97,20 @@ module CSVImporter
         return true
       end
       
+      def has_primary_key?
+        _columns.each_value do |c|
+          return true if c.primary_key
+        end
+        return false
+      end
+
+      def get_primary_column
+        _columns.each_value do |c|
+          return c if c.primary_key
+        end
+        return nil
+      end
+
       private
       def _columns
         self.class.columns

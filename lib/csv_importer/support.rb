@@ -114,33 +114,3 @@ class Array
     end
   end
 end
-
-class PhotoFile
-  def self.to_db(value)
-    return nil if value.nil?
-    return value if value.is_a? Paperclip::Attachment
-    
-    uri = URI.parse(value)
-    path = "/tmp/#{Time.now.to_f}.jpg"
-    Net::HTTP.start(uri.host) do |http|
-      resp = http.get(uri.path)
-      open(path, "wb") { |file|
-        file.write(resp.body)
-      }
-    end
-    ActionController::TestUploadedFile.new(path, "image/jpeg")
-  rescue Exception => e
-    nil
-  end
-  
-  def self.from_db(value)
-    return nil if value.nil?   
-    return value if value.is_a? ActionController::TestUploadedFile
-   
-    if Presently.uses_s3?
-      Presently::MediaPlug.image(value.url(:original))
-    else
-      value.url(:original)
-    end
-  end
-end
