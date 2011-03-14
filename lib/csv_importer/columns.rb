@@ -30,6 +30,21 @@ module CSVImporter
         return nil
       end
       
+      def has_foreign_key?
+        columns.each_value do |c|
+          return true if c.foreign_key
+        end
+        return false
+      end
+      
+      def get_foreign_keys
+        keys = []
+        columns.each_value do |c|
+          keys << c if !!c.foreign_key
+        end
+        return keys
+      end
+      
       private
       
       def create_accessors_for(column)
@@ -109,6 +124,21 @@ module CSVImporter
           return c if c.primary_key
         end
         return nil
+      end
+      
+      def has_foreign_key?
+        _columns.each_value do |c|
+          return true if c.foreign_key
+        end
+        return false
+      end
+      
+      def get_foreign_keys
+        keys = []
+        _columns.each_value do |c|
+          keys << c if !!c.foreign_key
+        end
+        return keys
       end
 
       private

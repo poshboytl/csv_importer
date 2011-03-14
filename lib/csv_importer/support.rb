@@ -113,4 +113,10 @@ class Array
       []
     end
   end
+  
+  def move_first_element_last!
+    element = self.first
+    self.delete(element)
+    self.push(element)
+  end
 end

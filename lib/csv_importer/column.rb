@@ -1,7 +1,7 @@
 module CSVImporter
   class Column
     attr_accessor :db_name, :title_name, :type
-    attr_accessor :is_required, :is_uniq, :is_skip_on_fail, :default_value, :primary_key
+    attr_accessor :is_required, :is_uniq, :is_skip_on_fail, :default_value, :primary_key, :foreign_key
     attr_accessor :is_attr
     attr_accessor :value
     
@@ -15,6 +15,7 @@ module CSVImporter
       @is_attr = options.key?(:is_attr) ? options[:is_attr] : true
       @default_value = options.key?(:default) ? options[:default] : nil
       @primary_key = options.key?(:primary_key) ? true : false
+      @foreign_key = options.key?(:foreign_key) ? options[:foreign_key] : false
     end
     
     def ==(other)
